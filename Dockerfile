@@ -1,23 +1,16 @@
 # Use the official Node.js image
 FROM node:18
-
 # Set working directory
 WORKDIR /app
-
-# Copy package files
+# Copy package files first
 COPY package*.json ./
-
 # Install dependencies
-RUN npm install --production
-
-# Copy all source code
+RUN npm install –production
+# Copy all other files
 COPY . .
-
-# Expose the port your app uses (commonly 3000 or 5000)
+# Expose the port your server listens on (change if not 3000)
 EXPOSE 3000
-
-# Define environment variable for production
+# Set environment variable for production
 ENV NODE_ENV=production
-
 # Start the app
-CMD ["node", "user.js"]
+CMD [“node”, “server.js”]
