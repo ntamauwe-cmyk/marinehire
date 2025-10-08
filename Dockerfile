@@ -1,25 +1,23 @@
-# Rebuild trigger - 8 Oct 2025
+# Use Node image
 FROM node:18
-WORKDIR /app
-COPY package*.jason ./
-RUN npm install--production
-COPY . .
-EXPOSE 3000 
-ENV NODE_ENV=production
-CMD ["node","server.js"]
-# Use the official Node.js image
-FROM node:18
+
 # Set working directory
 WORKDIR /app
-# Copy package files first
+
+# Copy package files
 COPY package*.json ./
-# Install dependencies
-RUN npm install –production
-# Copy all other files
-COPY . .
-# Expose the port your server listens on (change if not 3000)
-EXPOSE 3000
-# Set environment variable for production
+
+# Set environment to production
 ENV NODE_ENV=production
-# Start the app
-CMD [“node”, “server.js”]
+
+# Install dependencies
+RUN npm install --production
+
+# Copy all app files
+COPY . .
+
+# Expose port
+EXPOSE 5000
+
+# Start the server
+CMD ["node", "server.js"]
