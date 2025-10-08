@@ -1,20 +1,23 @@
-# Use an official Node.js runtime as a parent image
+# Use the official Node.js image
 FROM node:18
 
-# Set the working directory inside the container
+# Set working directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json if they exist
+# Copy package files
 COPY package*.json ./
 
 # Install dependencies
-RUN npm install
+RUN npm install --production
 
-# Copy the rest of your app's files
+# Copy all source code
 COPY . .
 
-# Expose the port your app runs on
-EXPOSE 5000
+# Expose the port your app uses (commonly 3000 or 5000)
+EXPOSE 3000
 
-# Command to run the app
-CMD ["npm", "start"]
+# Define environment variable for production
+ENV NODE_ENV=production
+
+# Start the app
+CMD ["node", "user.js"]
