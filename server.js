@@ -1,25 +1,18 @@
-// server.js
-
-const express = require('express');
-const dotenv = require('dotenv');
-const connectDB = require('./config/db');
+import express from "express";
+import dotenv from "dotenv";
+import connectDB from "./config/db.js";
 
 dotenv.config();
-
-const app = express();
-
-// Middleware
-app.use(express.json());
-
-// Connect to database
 connectDB();
 
-// Simple route
-app.get('/', (req, res) => {
-  res.send('API is running...');
+const app = express();
+app.use(express.json());
+
+// Sample test route
+app.get("/", (req, res) => {
+  res.send("API is running");
 });
 
-const PORT = process.env.PORT || 5000;
-
+const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
