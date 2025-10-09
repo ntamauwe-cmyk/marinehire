@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import helmet from "helmet";
 import connectDB from "./config/db.js";
-import authRoutes from "./auth.js"; // make sure path is correct
+import authRoutes from "./auth.js"; 
 
 dotenv.config();
 
