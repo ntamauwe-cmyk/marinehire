@@ -4,6 +4,7 @@ import cors from "cors";
 import helmet from "helmet";
 import connectDB from "./config/db.js";
 import authRoutes from "./auth.js"; 
+app.use("/api/auth",authRoutes);
 
 dotenv.config();
 
