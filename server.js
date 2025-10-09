@@ -1,41 +1,34 @@
 import express from "express";
 import dotenv from "dotenv";
+import cors from "cors";
+import helmet from "helmet";
+import connectDB from "./config/db.js";
+import authRoutes from "./auth.js"; // make sure path is correct
+
+dotenv.config();
+
+const app = express(); // <-- MUST be declared before using it
+
+// Middlewares
 app.use(cors({
-  origin: "*", // Allows requests from any frontend (temporary for testing)
+  origin: "*", // for testing; can replace with frontend URL later
   methods: ["GET","POST","PUT","DELETE"],
   allowedHeaders: ["Content-Type","Authorization"]
 }));
-import helmet from "helmet";
-import rateLimit from "express-rate-limit";
-import connectDB from "./config/db.js";
+app.use(express.json());
+app.use(helmet());
 
-dotenv.config();
+// Connect to MongoDB
 connectDB();
 
-const app = express();
-
-// Security middleware
-app.use(helmet());
-app.use(cors({ origin: "*" }));
-app.use(express.json({ limit: "10kb" }));
-
-// Rate limiting
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests
-});
-app.use(limiter);
+// Routes
+app.use("/api/auth", authRoutes);
 
 // Test route
 app.get("/", (req, res) => {
-  res.send("API is running securely...");
+  res.send("MarineHire API is running successfully");
 });
-app.get("/api/test", (req, res) => {
-  res.json({ success: true, message: "Test route working fine!" });
-});
-app.get('/api', (req, res) => {
-  res.send('MarineHire API is running successfully');
-});
-const PORT = process.env.PORT || 10000;
-app.listen(PORT, () => console.log(`✅ Server running securely on port ${PORT}`));
 
+// Start server
+const PORT = process.env.PORT || 10000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
