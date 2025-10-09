@@ -26,6 +26,9 @@ app.use(limiter);
 app.get("/", (req, res) => {
   res.send("API is running securely...");
 });
+app.get("/api/test", (req, res) => {
+  res.json({ success: true, message: "Test route working fine!" });
+});
 app.get('/api', (req, res) => {
   res.send('MarineHire API is running successfully');
 });
