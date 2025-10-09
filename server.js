@@ -26,7 +26,9 @@ app.use(limiter);
 app.get("/", (req, res) => {
   res.send("API is running securely...");
 });
-
+app.get('/api', (req, res) => {
+  res.send('MarineHire API is running successfully');
+});
 const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => console.log(`✅ Server running securely on port ${PORT}`));
 
