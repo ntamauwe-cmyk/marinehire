@@ -1,6 +1,10 @@
 import express from "express";
 import dotenv from "dotenv";
-import cors from "cors";
+app.use(cors({
+  origin: "*", // Allows requests from any frontend (temporary for testing)
+  methods: ["GET","POST","PUT","DELETE"],
+  allowedHeaders: ["Content-Type","Authorization"]
+}));
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 import connectDB from "./config/db.js";
