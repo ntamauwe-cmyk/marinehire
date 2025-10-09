@@ -1,35 +1,29 @@
-import express from "express";
-import dotenv from "dotenv";
-import cors from "cors";
-import helmet from "helmet";
-import connectDB from "./config/db.js";
-import authRoutes from "./auth.js"; 
-app.use("/api/auth",authRoutes);
+// server.js
 
+import express from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import connectDB from './config/db.js'; // adjust path if needed
+import authRoutes from './routes/authRoutes.js'; // adjust path if needed
+
+//  Load environment variables first
 dotenv.config();
 
-const app = express(); // <-- MUST be declared before using it
+//  Initialize Express
+const app = express();
 
-// Middlewares
-app.use(cors({
-  origin: "*", // for testing; can replace with frontend URL later
-  methods: ["GET","POST","PUT","DELETE"],
-  allowedHeaders: ["Content-Type","Authorization"]
-}));
+//  Middleware
+app.use(cors());
 app.use(express.json());
-app.use(helmet());
+
+//  Routes
+app.use('/api/auth', authRoutes);
 
 // Connect to MongoDB
 connectDB();
 
-// Routes
-app.use("/api/auth", authRoutes);
-
-// Test route
-app.get("/", (req, res) => {
-  res.send("MarineHire API is running successfully");
-});
-
-// Start server
+//  Start server
 const PORT = process.env.PORT || 10000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => {
+  console.log(Server running on port ${PORT});
+});
