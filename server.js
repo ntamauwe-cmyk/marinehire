@@ -1,41 +1,68 @@
 // server.js
+
 import express from "express";
-import cors from "cors";
 import dotenv from "dotenv";
-import connectDB from "./config/db.js";
-import authRoutes from "./authRoutes.js";
+import mongoose from "mongoose";
+import cors from "cors";
+import helmet from "helmet";
+import rateLimit from "express-rate-limit";
+import path from "path";
+import { fileURLToPath } from "url";
 
-dotenv.config(); // Load environment variables
+// Load environment variables
+dotenv.config();
 
-const app = express(); // Initialize Express
+const app = express();
 
-// ✅ CORS Configuration — allow only your live frontend
-app.use(
-  cors({
-    origin: "https://marinehire-frontend.onrender.com",
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true,
-  })
-);
+// ✅ Fix for Render reverse proxy
+app.set("trust proxy", 1);
 
-// ✅ Middleware
+// Middleware
+app.use(helmet());
+app.use(cors());
 app.use(express.json());
 
-// ✅ Routes
-app.use("/api/auth", authRoutes);
+// ✅ Rate limiter configuration
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+  standardHeaders: true,
+  legacyHeaders: false,
+});
 
-// ✅ Default route for testing
+app.use(limiter);
+
+// ✅ MongoDB Connection
+const mongoURI = process.env.MONGO_URI || "your_mongo_connection_string_here";
+
+mongoose
+  .connect(mongoURI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("✅ MongoDB connected:", mongoose.connection.host))
+  .catch((err) => console.error("❌ MongoDB connection error:", err.message));
+
+// Example route
 app.get("/", (req, res) => {
-  res.send("MarineHire backend is running successfully 🚀");
+  res.status(200).json({ message: "Server running securely on Render 🚀" });
 });
 
-// ✅ Connect to MongoDB
-connectDB();
+// ✅ Handle frontend (optional if you’re hosting React frontend on Render)
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-// ✅ Start server
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "client", "build")));
+  app.get("*", (req, res) =>
+    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"))
+  );
+}
+
+// ✅ Start the server
 const PORT = process.env.PORT || 10000;
-app.listen(PORT, () => {
-  console.log(`✅ Server running on port ${PORT}`);
-});
+app.listen(PORT, () =>
+  console.log(`✅ Server running securely on port ${PORT}`)
+);
 
 
