@@ -1,13 +1,16 @@
-// auth.js
+// authRoutes.js
 import express from "express";
-import { registerUser, loginUser } from "./authController.js"; // Make sure this path is correct
+import { registerUser, loginUser } from "./authController.js"; // note the ./authController.js path
 
 const router = express.Router();
 
-// Register Route
+// @route   POST /api/auth/register
+// @desc    Register a new user
 router.post("/register", registerUser);
 
-// Login Route
+// @route   POST /api/auth/login
+// @desc    Log in an existing user
 router.post("/login", loginUser);
 
 export default router;
+
